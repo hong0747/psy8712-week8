@@ -14,13 +14,10 @@ library(tidyverse)
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 week8_tbl <- readRDS("week8_shiny.rds")
 
-# Define UI for application that draws a histogram
 ui <- fluidPage(
   
-  # Application title
-  titlePanel("Week 8 Data"),
+  titlePanel("Week 8 Shiny App"),
   
-  # Sidebar with a slider input for number of bins 
   sidebarLayout(
     sidebarPanel(
       # Creates a toggle the user can use to select which rows to display based on participant's gender
@@ -39,18 +36,29 @@ ui <- fluidPage(
   )
 )
 
-# Define server logic required to draw a histogram
 server <- function(input, output) {
-  
-  output$distPlot <- renderPlot({
-    # generate bins based on input$bins from ui.R
-    x    <- faithful[, 2]
-    bins <- seq(min(x), max(x), length.out = input$bins + 1)
+  output$scatterOLS <- renderPlot({
+    # Check the input "genderSelect" defined in the UI code to determine whether any rows should be filtered based on gender
+    if (input$genderSelect == "All") {
+      filtered_tbl <- week8_tbl
+    } else {
+      filtered_tbl <- week8_tbl %>% filter(gender == input$genderSelect)
+    }
     
-    # draw the histogram with the specified number of bins
-    hist(x, breaks = bins, col = 'darkgray', border = 'white',
-         xlab = 'Waiting time to next eruption (in mins)',
-         main = 'Histogram of waiting times')
+    # Determine if the error band should be displayed based on the "displayErrorBand" input from the ui code
+    displayErrorBand <- input$displayErrorBand == "Y"
+    
+    # Determine if early participants (completed assessment prior to July 1, 2017) should be filtered
+    if (input$showEarlyParticipants == "N") {
+      filtered_tbl <- filtered_tbl %>% filter(timeStart >= as.POSIXct("2017-07-01"))
+    }
+    
+    # Display the plot with the settings determined above
+    filtered_tbl %>%
+      ggplot(mapping = aes(x = x_bar, y = y_bar)) +
+      geom_point() +
+      geom_jitter() +
+      geom_smooth(method = "lm", se = displayErrorBand, fill = "purple")
   })
 }
 
