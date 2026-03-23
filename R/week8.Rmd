@@ -1,0 +1,24 @@
+---
+title: "PSY 8712 Week 8 Project"
+author: "Julia Hong"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output:
+  html_document:
+    toc: true
+    number_sections: true
+knit: (function(inputFile, encoding) {rmarkdown::render(inputFile, encoding = encoding, output_dir = "../out")})
+---
+
+# **Reproducible Image and Online Resources**
+
+An image of this project as of *`r Sys.Date()`* can be accessed by [clicking this link](https://mybinder.org).
+
+An interactive web app is available by [clicking this link instead](https://shinyapp.io).
+
+# **Script Settings and Resources**
+
+# **Data Import and Cleaning**
+
+# **Visualization**
+
+# **Analysis**
