@@ -20,21 +20,39 @@ An interactive web app is available by [clicking this link instead](https://shin
 ```{r echo = FALSE}
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 library(tidyverse)
+library(kableExtra)
 ```
 
 # **Data Import and Cleaning**
 
-Import data from week3.csv, add labels for gender and condition, reverse code Q5
+Import data from week3.csv, add labels for gender and condition, reverse code Q5, compute mean scores for Q1-Q6 and Q8-Q10
 
 ```{r echo = FALSE}
 week8_tbl <- read_csv("../data/week3.csv", col_names = TRUE, col_types = cols(timeStart=col_datetime("%F %h:%M:%S"))) %>%
   mutate(
     gender = factor(gender, levels = c("M", "F"), labels = c("Male", "Female")),
     condition = factor(condition, levels = c("A", "B", "C"), labels = c("Block A", "Block B", "Control")),
-    q5 = 6 - q5
+    q5 = 6 - q5,
+    x_bar = rowMeans(across(q1:q6)),
+    y_bar = rowMeans(across(q8:q10))
   )
 ```
 
 # **Visualization**
+
+Visualize data with kable and create scatterplot for mean scores
+
+```{r echo = FALSE}
+week8_tbl %>% 
+  select(q1:q6) %>% 
+  kable()
+
+week8_tbl %>%
+  ggplot(mapping = aes(x = x_bar, y = y_bar)) +
+  geom_point() +
+  geom_jitter() +
+  geom_smooth(method = "lm", se = TRUE, fill = "purple")
+```
+
 
 # **Analysis**
