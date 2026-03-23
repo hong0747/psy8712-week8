@@ -11,7 +11,6 @@ library(shiny)
 library(tidyverse)
 
 # Import data
-setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 week8_tbl <- readRDS("week8_shiny.rds")
 
 ui <- fluidPage(
