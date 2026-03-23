@@ -56,3 +56,22 @@ week8_tbl %>%
 
 
 # **Analysis**
+
+Calculate correlation between x_bar and y_bar
+
+```{r}
+corr <- cor.test(x = week8_tbl$x_bar, y = week8_tbl$y_bar)
+corr
+```
+
+I observed a correlation of `r sub("^0\\.", ".", round(corr$estimate, 2))`, which is insignificant at an alpha of .05, so we fail to reject the null hypothesis that the correlation is equal to 0.
+
+# **Data Export**
+
+Export dataset for shiny including timeStart, gender, x_bar, and y_bar variables
+
+```{r}
+week8_tbl %>%
+  select(timeStart, gender, x_bar, y_bar) %>%
+  saveRDS(file = "../shiny_week8/week8_shiny.rds")
+```
