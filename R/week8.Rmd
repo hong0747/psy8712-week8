@@ -17,7 +17,23 @@ An interactive web app is available by [clicking this link instead](https://shin
 
 # **Script Settings and Resources**
 
+```{r echo = FALSE}
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+library(tidyverse)
+```
+
 # **Data Import and Cleaning**
+
+Import data from week3.csv, add labels for gender and condition, reverse code Q5
+
+```{r echo = FALSE}
+week8_tbl <- read_csv("../data/week3.csv", col_names = TRUE, col_types = cols(timeStart=col_datetime("%F %h:%M:%S"))) %>%
+  mutate(
+    gender = factor(gender, levels = c("M", "F"), labels = c("Male", "Female")),
+    condition = factor(condition, levels = c("A", "B", "C"), labels = c("Block A", "Block B", "Control")),
+    q5 = 6 - q5
+  )
+```
 
 # **Visualization**
 
